@@ -58,25 +58,41 @@ videoSelector.addEventListener("change", async (event) => {
         console.log("video.currentTime : ", video.currentTime);
         // 動画の再生を開始
         video.play();
-        // 動画の再生位置を0.5秒に設定
+        // 動画を0.5秒ごとにキャプチャして表示
+        const frameInterval = 0.5;
+        setInterval(() => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const image = document.createElement("img")
+            image.id = "videoFrame" + video.currentTime;
+            image.style.width = videoWidth * 0.2;
+            image.style.height = videoHeight * 0.2;
+            image.src = canvas.toDataURL();
+            const videoFrameWrapper = document.getElementById("videoFrameWrapper");
+            videoFrameWrapper.appendChild(image);
+            if(video.currentTime + frameInterval > video.duration || video.currentTime > 60 ){
+                console.log("finish time : " + video.currentTime);
+                return;
+            }
+        }, frameInterval * 1000, video);
 
-        // 動画を10分割したフレームを取得
-        for (let i = 0; i < 10; i++){
-            video.currentTime = i * video.duration / 10;
-            video.addEventListener("seeked", async () => { 
-                console.log("video currentTime : ", video.currentTime);
-                const canvas = document.getElementById("videoFrameCanvas" + i);
-                canvas.style.width = video.videoWidth * 0.3;
-                canvas.style.height = video.videoHeight * 0.3;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const image = document.getElementById("videoFrame" + i);
-                image.style.width = videoWidth * 0.3;
-                image.style.height = videoHeight * 0.3;
-                image.src = canvas.toDataURL();
+        // for (let i = 0; i < 10; i++){
+        //     video.currentTime = i * video.duration / 10;
+        //     video.addEventListener("seeked", async () => { 
+        //         console.log("video currentTime : ", video.currentTime);
+        //         const canvas = document.createElement("canvas");
+        //         canvas.style.width = videoWidth * 0.3;
+        //         canvas.style.height = videoHeight * 0.3;
+        //         const ctx = canvas.getContext("2d");
+        //         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        //         const image = document.getElementById("videoFrame" + i);
+        //         image.style.width = videoWidth * 0.3;
+        //         image.style.height = videoHeight * 0.3;
+        //         image.src = canvas.toDataURL();
 
-            });
-        }
+        //     });
+        // }
     });
 
 });
