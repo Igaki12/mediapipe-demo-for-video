@@ -66,8 +66,8 @@ videoSelector.addEventListener("change", async (event) => {
             video.addEventListener("seeked", async () => { 
                 console.log("video currentTime : ", video.currentTime);
                 const canvas = document.getElementById("videoFrameCanvas" + i);
-                canvas.width = video.videoWidth * 0.3;
-                canvas.height = video.videoHeight * 0.3;
+                canvas.style.width = video.videoWidth * 0.3;
+                canvas.style.height = video.videoHeight * 0.3;
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const image = document.getElementById("videoFrame" + i);
