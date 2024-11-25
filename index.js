@@ -62,7 +62,7 @@ videoSelector.addEventListener("change", async (event) => {
         const frameInterval = 0.5;
         const frameIntervalCapture = setInterval(() => {
             getFrame();
-            if (video.currentTime + frameInterval > video.duration){
+            if (video.currentTime + 2* frameInterval > video.duration){
                 clearInterval(frameIntervalCapture);
             }
         }, frameInterval * 1000);
@@ -82,22 +82,6 @@ videoSelector.addEventListener("change", async (event) => {
             videoFrameWrapper.appendChild(image);
         }
 
-        // for (let i = 0; i < 10; i++){
-        //     video.currentTime = i * video.duration / 10;
-        //     video.addEventListener("seeked", async () => { 
-        //         console.log("video currentTime : ", video.currentTime);
-        //         const canvas = document.createElement("canvas");
-        //         canvas.style.width = videoWidth * 0.3;
-        //         canvas.style.height = videoHeight * 0.3;
-        //         const ctx = canvas.getContext("2d");
-        //         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        //         const image = document.getElementById("videoFrame" + i);
-        //         image.style.width = videoWidth * 0.3;
-        //         image.style.height = videoHeight * 0.3;
-        //         image.src = canvas.toDataURL();
-
-        //     });
-        // }
     });
 
 });
