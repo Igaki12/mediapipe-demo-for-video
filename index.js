@@ -62,6 +62,8 @@ videoSelector.addEventListener("change", async (event) => {
         const frameInterval = 0.5;
         setInterval(() => {
             const canvas = document.createElement("canvas");
+            canvas.width = video.style.width;
+            canvas.height = video.style.height;
             const ctx = canvas.getContext("2d");
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = document.createElement("img")
