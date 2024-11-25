@@ -53,21 +53,23 @@ videoSelector.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     video.src = URL.createObjectURL(file);
     video.addEventListener("loadeddata", async () => {
-    console.log("video.duration : ", video.duration);
-    // 動画を10分割したフレームを取得
-    for (let i = 0; i < 10; i++) {
-        video.currentTime = i * video.duration / 10;
-        video.addEventListener("seeked", async () => {
-            console.log("video currentTime : ", video.currentTime);
-            const canvas = document.createElement("canvas");
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const image = document.getElementById("videoFrame" + i);
-            image.src = canvas.toDataURL();
-        });
-    }
+        console.log("video.duration : ", video.duration);
+        // 動画を10分割したフレームを取得
+        for (let i = 0; i < 10; i++) async () => {
+            video.currentTime = i * video.duration / 10;
+            video.addEventListener("seeked", async () => {
+                console.log("video currentTime : ", video.currentTime);
+                const canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const image = document.getElementById("videoFrame" + i);
+                image.style.width = videoWidth * 0.3;
+                image.style.height = videoHeight * 0.3;
+                image.src = canvas.toDataURL();
+            });
+        }
     });
 
 });
