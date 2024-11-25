@@ -55,6 +55,7 @@ videoSelector.addEventListener("change", async (event) => {
     video.addEventListener("loadedmetadata", async () => {
         console.log("video.duration : ", video.duration);
         console.log("video.currentTime : ", video.currentTime);
+        video.currentTime = 0.5;
         // 動画を10分割したフレームを取得
         for (let i = 0; i < 10; i++) async () => {
             video.currentTime = i * video.duration / 10;
