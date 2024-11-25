@@ -61,9 +61,9 @@ videoSelector.addEventListener("change", async (event) => {
         // 動画の再生位置を0.5秒に設定
 
         // 動画を10分割したフレームを取得
-        for (let i = 0; i < 10; i++) async () => {
+        for (let i = 0; i < 10; i++){
             video.currentTime = i * video.duration / 10;
-            video.addEventListener("seeked", () => { 
+            video.addEventListener("seeked", async () => { 
                 console.log("video currentTime : ", video.currentTime);
                 const canvas = document.createElement("canvas");
                 canvas.width = video.videoWidth;
