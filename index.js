@@ -66,12 +66,57 @@ videoSelector.addEventListener("change", async (event) => {
         const frameIntervalCapture = setInterval(() => {
             frameNumber++;
             getFrame(frameNumber);
-            if (video.currentTime + 2* frameInterval > video.duration){
+            if (video.currentTime + 2 * frameInterval > video.duration) {
                 clearInterval(frameIntervalCapture);
+                // ここに追加メモ
+                console.log("frameNumber : ", frameNumber);
+                if (!poseLandmarker) {
+                    console.log("poseLandmarker is not ready yet.");
+                    return;
+                }
+                if (runningMode == "VIDEO") {
+                    runningMode = "IMAGE";
+                    poseLandmarker.setOptions({ runningMode: "IMAGE" });
+                }
+                console.log("ready to process video");
+                const frameLandmarksWrapper = document.getElementById("frameLandmarksWrapper");
+                for (let f = 0; f < frameNumber; f++) {
+                    const image = document.createElement("img");
+                    image.style.width = "100px";
+                    image.style.height = "100px";
+                    image.style.margin = "2px";
+                    image.src = document.getElementById("videoFrame" + f).src;
+                    image.crossOrigin = "anonymous";
+                    image.loading = "lazy";
+                    image.id = "landmarksImage" + f;
+                    frameLandmarksWrapper.appendChild(image);
+                    const poseCanvas = document.createElement("canvas");
+                    poseCanvas.setAttribute("class", "canvas");
+                    poseCanvas.setAttribute("width", image.naturalWidth);
+                    poseCanvas.setAttribute("height", image.naturalHeight);
+                    poseCanvas.style.left = image.offsetLeft + "px";
+                    poseCanvas.style.top = image.offsetTop + "px";
+                    frameLandmarksWrapper.appendChild(poseCanvas);
+                    console.log("created image and canvas : " + f);
+                    poseLandmarker.detect(image, async (result) => {
+                        // 
+                        const poseCanvasCtx = poseCanvas.getContext("2d");
+                        const drawingUtils = new DrawingUtils(poseCanvasCtx);
+                        for (const landmark of result.landmarks) {
+                            drawingUtils.drawLandmarks(landmark, {
+                                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                            });
+                            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+                        }
+                    })
+
+
+                }
+                console.log("finished processing video");
             }
         }, frameInterval * 1000);
-        console.log("frameNumber : ", frameNumber);
-        function getFrame(num){
+
+        function getFrame(num) {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -87,49 +132,6 @@ videoSelector.addEventListener("change", async (event) => {
             videoFrameWrapper.appendChild(image);
         }
 
-        if (!poseLandmarker) {
-            console.log("poseLandmarker is not ready yet.");
-            return;
-        }
-        if(runningMode == "VIDEO"){
-            runningMode = "IMAGE";
-            poseLandmarker.setOptions({runningMode: "IMAGE"});
-        }
-        console.log("ready to process video");
-        const frameLandmarksWrapper = document.getElementById("frameLandmarksWrapper");
-        for (let f = 0; f < frameNumber; f++){
-            const image = document.createElement("img");
-            image.style.width = "100px";
-            image.style.height = "100px";
-            image.style.margin = "2px";
-            image.src = document.getElementById("videoFrame" + f).src;
-            image.crossOrigin = "anonymous";
-            image.loading = "lazy";
-            image.id = "landmarksImage" + f;
-            frameLandmarksWrapper.appendChild(image);
-            const poseCanvas = document.createElement("canvas");
-            poseCanvas.setAttribute("class","canvas");
-            poseCanvas.setAttribute("width",image.naturalWidth);
-            poseCanvas.setAttribute("height",image.naturalHeight);
-            poseCanvas.style.left = image.offsetLeft + "px";
-            poseCanvas.style.top = image.offsetTop + "px";
-            frameLandmarksWrapper.appendChild(poseCanvas);
-            console.log("created image and canvas : " + f);
-            poseLandmarker.detect(image, async (result) => {
-                // 
-                const poseCanvasCtx = poseCanvas.getContext("2d");
-                const drawingUtils = new DrawingUtils(poseCanvasCtx);
-                for (const landmark of result.landmarks){
-                    drawingUtils.drawLandmarks(landmark, {
-                        radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-                    });
-                    drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-                }
-            })
-
-
-        }
-        console.log("finished processing video");
 
 
     });
