@@ -60,15 +60,14 @@ videoSelector.addEventListener("change", async (event) => {
         video.play();
         // 動画を0.5秒ごとにキャプチャして表示
         const frameInterval = 0.5;
-        setInterval(() => {
+        setInterval(function getFrame() {
             const canvas = document.createElement("canvas");
-            canvas.width = video.style.width;
-            canvas.height = video.style.height;
             const ctx = canvas.getContext("2d");
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = document.createElement("img")
             image.id = "videoFrame" + video.currentTime;
-            image.style.width = "20%";
+            image.style.width = "360px";
+            image.style.height = "480px";
             image.crossOrigin = "anonymous"
             image.loading = "lazy"
             image.src = canvas.toDataURL();
@@ -76,7 +75,7 @@ videoSelector.addEventListener("change", async (event) => {
             videoFrameWrapper.appendChild(image);
             if(video.currentTime + frameInterval > video.duration || video.currentTime > 60 ){
                 console.log("finish time : " + video.currentTime);
-                clearInterval();
+                clearInterval(getFrame);
             }
         }, frameInterval * 1000);
 
