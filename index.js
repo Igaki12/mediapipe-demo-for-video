@@ -79,24 +79,16 @@ videoSelector.addEventListener("change", async (event) => {
                     poseLandmarker.setOptions({ runningMode: "IMAGE" });
                 }
                 console.log("ready to process video");
-                const frameLandmarksWrapper = document.getElementById("frameLandmarksWrapper");
-                for (let f = 0; f < frameNumber; f++) {
-                    const image = document.createElement("img");
-                    image.style.width = "100px";
-                    image.style.height = "100px";
-                    image.style.margin = "2px";
-                    image.src = document.getElementById("videoFrame" + f).src;
-                    image.crossOrigin = "anonymous";
-                    image.loading = "lazy";
-                    image.id = "landmarksImage" + f;
-                    frameLandmarksWrapper.appendChild(image);
+                const frameImageWrapper = document.getElementById("frameImageWrapper");
+                for (let f = 0; f <= frameNumber; f++) {
+                    const image = document.getElementById("frameImage" + f);
                     const poseCanvas = document.createElement("canvas");
                     poseCanvas.setAttribute("class", "canvas");
                     poseCanvas.setAttribute("width", image.naturalWidth);
                     poseCanvas.setAttribute("height", image.naturalHeight);
                     poseCanvas.style.left = image.offsetLeft + "px";
                     poseCanvas.style.top = image.offsetTop + "px";
-                    frameLandmarksWrapper.appendChild(poseCanvas);
+                    frameImageWrapper.appendChild(poseCanvas);
                     console.log("created image and canvas : " + f);
                     poseLandmarker.detect(image, async (result) => {
                         // 
@@ -130,6 +122,16 @@ videoSelector.addEventListener("change", async (event) => {
             image.src = canvas.toDataURL();
             const videoFrameWrapper = document.getElementById("videoFrameWrapper");
             videoFrameWrapper.appendChild(image);
+            const image2 = document.createElement("img")
+            image2.id = "frameImage" + num;
+            image2.style.width = "150px";
+            image2.style.height = "150px";
+            image2.style.margin = "2px";
+            image2.crossOrigin = "anonymous"
+            image2.loading = "lazy"
+            image2.src = canvas.toDataURL();
+            const frameImageWrapper = document.getElementById("frameImageWrapper");
+            frameImageWrapper.appendChild(image2);
         }
 
 
