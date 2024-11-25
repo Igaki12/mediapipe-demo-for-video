@@ -84,8 +84,8 @@ videoSelector.addEventListener("change", async (event) => {
                     const image = document.getElementById("frameImage" + f);
                     const poseCanvas = document.createElement("canvas");
                     poseCanvas.setAttribute("class", "canvas");
-                    poseCanvas.setAttribute("width", image.naturalWidth);
-                    poseCanvas.setAttribute("height", image.naturalHeight);
+                    poseCanvas.setAttribute("width", image.style.width);
+                    poseCanvas.setAttribute("height", image.style.height);
                     poseCanvas.style.left = image.offsetLeft + "px";
                     poseCanvas.style.top = image.offsetTop + "px";
                     frameImageWrapper.appendChild(poseCanvas);
