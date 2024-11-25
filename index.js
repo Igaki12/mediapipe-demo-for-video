@@ -61,7 +61,7 @@ videoSelector.addEventListener("change", async (event) => {
         // 動画の再生を開始
         video.play();
         // 動画を0.5秒ごとにキャプチャして表示
-        const frameInterval = 0.5;
+        const frameInterval = 0.2;
         const frameIntervalCapture = setInterval(() => {
             getFrame();
             if (video.currentTime + 2* frameInterval > video.duration){
@@ -77,12 +77,25 @@ videoSelector.addEventListener("change", async (event) => {
             image.id = "videoFrame" + video.currentTime;
             image.style.width = "50px";
             image.style.height = "50px";
+            image.style.margin = "2px";
             image.crossOrigin = "anonymous"
             image.loading = "lazy"
             image.src = canvas.toDataURL();
             const videoFrameWrapper = document.getElementById("videoFrameWrapper");
             videoFrameWrapper.appendChild(image);
         }
+
+        if (!poseLandmarker) {
+            console.log("poseLandmarker is not ready yet.");
+            return;
+        }
+        if(runningMode == "VIDEO"){
+            runningMode = "IMAGE";
+            poseLandmarker.setOptions({runningMode: "IMAGE"});
+        }
+        console.log("ready to process video");
+
+
 
     });
 
