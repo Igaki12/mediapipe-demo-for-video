@@ -28,13 +28,13 @@ limitations under the License. -->
 
 <body>
   <h1>Pose detection using the MediaPipe PoseLandmarker task</h1>
-  <p>モジュールの読み込みに数秒を要します。お待ちください...</p>
+  <p id="loadingMsg">モジュールの読み込みに数秒を要します。お待ちください...</p>
 
   <section id="demos" class="invisible">
     <h2>Demo : 動画を切り分けたそれぞれのフレームで姿勢を感知する</h2>
     <input type="file" id="videoSelector" accept="video/*">
     <video id="video" crossorigin="anonymous" controls style="transform: none;" width="100%" ></video>
-    <div id="videoFrameDiv">
+    <div id="videoFrameWrapper">
         <img id="videoFrame0" crossorigin="anonymous" title="ここに画像が表示されます" loading="lazy" />
         <img id="videoFrame1" crossorigin="anonymous" title="ここに画像が表示されます" loading="lazy" />
         <img id="videoFrame2" crossorigin="anonymous" title="ここに画像が表示されます" loading="lazy" />
