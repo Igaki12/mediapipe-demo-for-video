@@ -47,7 +47,8 @@ const createPoseLandmarker = async () => {
 createPoseLandmarker();
 
 const videoSelector = document.getElementById("videoSelector");
-const video = document.getElementById("video");
+// const video = document.getElementById("video");
+const video = document.querySelector("video")
 // Load the video when the user selects one
 videoSelector.addEventListener("change", async (event) => {
     const file = event.target.files[0];
@@ -57,7 +58,8 @@ videoSelector.addEventListener("change", async (event) => {
         console.log("video.currentTime : ", video.currentTime);
         // 動画の再生を開始
         video.play();
-        video.currentTime = 0.5;
+        // 動画の再生位置を0.5秒に設定
+
         // 動画を10分割したフレームを取得
         for (let i = 0; i < 10; i++) async () => {
             video.currentTime = i * video.duration / 10;
