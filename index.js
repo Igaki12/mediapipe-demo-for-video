@@ -65,7 +65,7 @@ videoSelector.addEventListener("change", async (event) => {
             video.currentTime = i * video.duration / 10;
             video.addEventListener("seeked", async () => { 
                 console.log("video currentTime : ", video.currentTime);
-                const canvas = document.getElementById("canvas" + i);
+                const canvas = document.getElementById("videoFrameCanvas" + i);
                 canvas.width = video.videoWidth * 0.3;
                 canvas.height = video.videoHeight * 0.3;
                 const ctx = canvas.getContext("2d");
