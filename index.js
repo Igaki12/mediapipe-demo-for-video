@@ -52,7 +52,7 @@ const video = document.getElementById("video");
 videoSelector.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     video.src = URL.createObjectURL(file);
-    video.addEventListener("loadeddata", async () => {
+    video.addEventListener("loadedmetadata", async () => {
         console.log("video.duration : ", video.duration);
         // 動画を10分割したフレームを取得
         for (let i = 0; i < 10; i++) async () => {
