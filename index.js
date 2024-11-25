@@ -52,6 +52,7 @@ const video = document.getElementById("video");
 videoSelector.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     video.src = URL.createObjectURL(file);
+    console.log("video.duration : ", video.duration);
     // 動画を10分割したフレームを取得
     for (let i = 0; i < 10; i++) {
         video.currentTime = i * video.duration / 10;
