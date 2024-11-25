@@ -55,13 +55,16 @@ videoSelector.addEventListener("change", async (event) => {
     // 動画を10分割したフレームを取得
     for (let i = 0; i < 10; i++) {
         video.currentTime = i * video.duration / 10;
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const image = document.getElementById("videoFrame" + i);
-        image.src = canvas.toDataURL();
+        video.addEventListener("seeked", async () => {
+            console.log("video currentTime : ", video.currentTime);
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const image = document.getElementById("videoFrame" + i);
+            image.src = canvas.toDataURL();
+        });
     }
 
 });
