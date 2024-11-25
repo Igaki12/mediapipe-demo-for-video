@@ -114,6 +114,7 @@ videoSelector.addEventListener("change", async (event) => {
             poseCanvas.style.left = image.offsetLeft + "px";
             poseCanvas.style.top = image.offsetTop + "px";
             frameLandmarksWrapper.appendChild(poseCanvas);
+            console.log("created image and canvas : " + f);
             poseLandmarker.detect(image, async (result) => {
                 // 
                 const poseCanvasCtx = poseCanvas.getContext("2d");
