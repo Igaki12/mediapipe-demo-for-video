@@ -66,16 +66,18 @@ videoSelector.addEventListener("change", async (event) => {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = document.createElement("img")
             image.id = "videoFrame" + video.currentTime;
-            image.style.width = video.width * 0.2;
-            image.style.height = video.height * 0.2;
+            image.style.width = video.style.width * 0.2;
+            image.style.height = video.style.height * 0.2;
+            image.crossOrigin = "anonymous"
+            image.loading = "lazy"
             image.src = canvas.toDataURL();
             const videoFrameWrapper = document.getElementById("videoFrameWrapper");
             videoFrameWrapper.appendChild(image);
             if(video.currentTime + frameInterval > video.duration || video.currentTime > 60 ){
                 console.log("finish time : " + video.currentTime);
-                return;
+                clearInterval();
             }
-        }, frameInterval * 1000, video);
+        }, frameInterval * 1000);
 
         // for (let i = 0; i < 10; i++){
         //     video.currentTime = i * video.duration / 10;
