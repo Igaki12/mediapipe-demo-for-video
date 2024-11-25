@@ -52,6 +52,8 @@ const video = document.querySelector("video")
 // Load the video when the user selects one
 videoSelector.addEventListener("change", async (event) => {
     const file = event.target.files[0];
+    // video file の縦横比をfileから取得
+
     video.src = URL.createObjectURL(file);
     video.addEventListener("loadedmetadata", async () => {
         console.log("video.duration : ", video.duration);
@@ -73,8 +75,8 @@ videoSelector.addEventListener("change", async (event) => {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = document.createElement("img")
             image.id = "videoFrame" + video.currentTime;
-            image.style.width = "50px";
-            image.style.height = "50px";
+            image.style.width = 0.2 * video.videoWidth;
+            image.style.height = 0.2 * video.videoHeight;
             image.crossOrigin = "anonymous"
             image.loading = "lazy"
             image.src = canvas.toDataURL();
