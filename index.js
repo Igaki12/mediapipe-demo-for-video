@@ -75,8 +75,8 @@ videoSelector.addEventListener("change", async (event) => {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = document.createElement("img")
             image.id = "videoFrame" + video.currentTime;
-            image.style.width = 0.2 * video.videoWidth;
-            image.style.height = 0.2 * video.videoHeight;
+            image.style.width = "50px";
+            image.style.height = "auto";
             image.crossOrigin = "anonymous"
             image.loading = "lazy"
             image.src = canvas.toDataURL();
