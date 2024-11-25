@@ -63,14 +63,14 @@ videoSelector.addEventListener("change", async (event) => {
         // 動画を0.5秒ごとにキャプチャして表示
         const frameInterval = 0.2;
         let frameNumber = 0;
-        const frameIntervalCapture = setInterval((frameNumber) => {
+        const frameIntervalCapture = setInterval(() => {
             frameNumber++;
             getFrame(frameNumber);
             if (video.currentTime + 2* frameInterval > video.duration){
                 clearInterval(frameIntervalCapture);
             }
         }, frameInterval * 1000);
-
+        console.log("frameNumber : ", frameNumber);
         function getFrame(num){
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
