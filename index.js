@@ -64,7 +64,7 @@ videoSelector.addEventListener("change", async (event) => {
         video.play();
         // 動画を0.5秒ごとにキャプチャして表示
         const frameInterval = 0.5;
-        let frameNumber = 0;
+        let frameNumber = -1;
         const frameIntervalCapture = setInterval(async () => {
             frameNumber++;
             getFrame(frameNumber);
@@ -90,7 +90,7 @@ videoSelector.addEventListener("change", async (event) => {
             console.log(frameImageWrapper.childElementCount);
             console.log(frameImageWrapper.children);
             // 1秒ごとにposeLandmarker.detectを呼び出す
-            let i = 0;
+            let i = -1;
             const frameIntervalDetect = setInterval(async () => {
                 if (i >= frameImageWrapper.childElementCount) {
                     clearInterval(frameIntervalDetect);
@@ -98,6 +98,7 @@ videoSelector.addEventListener("change", async (event) => {
                 if (frameImageWrapper.children[i] == undefined) {
                     clearInterval(frameIntervalDetect);
                 }
+                i++;
                 const image = frameImageWrapper.children[i];
                 const poseCanvas = document.createElement("canvas");
                 poseCanvas.setAttribute("class", "canvas");
@@ -116,7 +117,7 @@ videoSelector.addEventListener("change", async (event) => {
                         });
                         drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
                     }
-                i++;
+                
                 })
                 console.log("finished processing video frame : " + image.id);
             }, 1500);
