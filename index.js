@@ -119,7 +119,7 @@ videoSelector.addEventListener("change", async (event) => {
                 i++;
                 })
                 console.log("finished processing video frame : " + image.id);
-            }, 1000);
+            }, 1500);
 
             // const image0 = frameImageWrapper.children[0];
             // const poseCanvas0 = document.createElement("canvas");
