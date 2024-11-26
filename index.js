@@ -95,9 +95,9 @@ videoSelector.addEventListener("change", async (event) => {
                 if (i >= frameImageWrapper.childElementCount) {
                     clearInterval(frameIntervalDetect);
                 }
-                if (frameImageWrapper.children[i] == undefined) {
-                    clearInterval(frameIntervalDetect);
-                }
+                // if (frameImageWrapper.children[i] == undefined) {
+                //     clearInterval(frameIntervalDetect);
+                // }
                 i++;
                 const image = frameImageWrapper.children[i];
                 const poseCanvas = document.createElement("canvas");
@@ -140,7 +140,7 @@ videoSelector.addEventListener("change", async (event) => {
             //         drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
             //     }
             // })
-            console.log("finished processing video frame : " + image0.id);
+            // console.log("finished processing video frame : " + image0.id);
 
             console.log("finished processing video");
         }, video.duration * 1000 + 2000);
