@@ -130,8 +130,8 @@ videoSelector.addEventListener("change", async (event) => {
             videoFrameWrapper.appendChild(image);
             const image2 = document.createElement("img")
             image2.id = "frameImage" + num;
-            image2.style.width = "150px";
-            image2.style.height = "150px";
+            image2.style.width = (0.3*video.videoWidth) + "px";
+            image2.style.height = (0.3*video.videoHeight) + "px";
             image2.style.margin = "2px";
             image2.crossOrigin = "anonymous"
             image2.loading = "lazy"
