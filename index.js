@@ -58,62 +58,61 @@ videoSelector.addEventListener("change", async (event) => {
     video.addEventListener("loadedmetadata", async () => {
         console.log("video.duration : ", video.duration);
         console.log("video.currentTime : ", video.currentTime);
+        console.log("video.videoWidth : ", video.videoWidth);
+        console.log("video.videoHeight : ", video.videoHeight);
         // 動画の再生を開始
         video.play();
         // 動画を0.5秒ごとにキャプチャして表示
         const frameInterval = 0.2;
         let frameNumber = 0;
-        let poseLandmakerFlag = false;
         const frameIntervalCapture = setInterval(async () => {
             frameNumber++;
             getFrame(frameNumber);
             if (video.currentTime + 2 * frameInterval > video.duration) {
                 clearInterval(frameIntervalCapture);
-                // ここに追加メモ
-                if (poseLandmakerFlag == false) {
-                    poseLandmakerFlag = true;
-                }else{
-                    return;
-                }
-                console.log("frameNumber : ", frameNumber);
-                if (!poseLandmarker) {
-                    console.log("poseLandmarker is not ready yet.");
-                    return;
-                }
-                if (runningMode == "VIDEO") {
-                    runningMode = "IMAGE";
-                    poseLandmarker.setOptions({ runningMode: "IMAGE" });
-                }
-                console.log("ready to process video");
-                const frameImageWrapper = document.getElementById("frameImageWrapper");
-                console.log("frameImageWrapper.childElementCount : ");
-                console.log(frameImageWrapper.childElementCount);
-                console.log(frameImageWrapper.children);
-                for (const image of frameImageWrapper.children) {
-                    console.log("processing video frame : " + image.id);
-                    const poseCanvas = document.createElement("canvas");
-                    poseCanvas.setAttribute("class", "canvas");
-                    poseCanvas.setAttribute("width", image.style.width);
-                    poseCanvas.setAttribute("height", image.style.height);
-                    poseCanvas.style.left = image.offsetLeft + "px";
-                    poseCanvas.style.top = image.offsetTop + "px";
-                    frameImageWrapper.appendChild(poseCanvas);
-                    console.log("created image and canvas : " + image.id);
-                    await poseLandmarker.detect(image, async (result) => {
-                        // 
-                        const poseCanvasCtx = poseCanvas.getContext("2d");
-                        const drawingUtils = new DrawingUtils(poseCanvasCtx);
-                        for (const landmark of result.landmarks) {
-                            drawingUtils.drawLandmarks(landmark, {
-                                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-                            });
-                            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-                        }
-                    })
-                }
-                console.log("finished processing video");
             }
         }, frameInterval * 1000);
+
+        // setTimeoutでposeLandmarker.detectを呼び出す
+        setTimeout(async () => {
+            if (!poseLandmarker) {
+                console.log("poseLandmarker is not ready yet.");
+                return;
+            }
+            if (runningMode == "VIDEO") {
+                runningMode = "IMAGE";
+                poseLandmarker.setOptions({ runningMode: "IMAGE" });
+            }
+            console.log("ready to process video");
+            const frameImageWrapper = document.getElementById("frameImageWrapper");
+            console.log("frameImageWrapper.childElementCount : ");
+            console.log(frameImageWrapper.childElementCount);
+            console.log(frameImageWrapper.children);
+            for (const image of frameImageWrapper.children) {
+                console.log("processing video frame : " + image.id);
+                const poseCanvas = document.createElement("canvas");
+                poseCanvas.setAttribute("class", "canvas");
+                poseCanvas.setAttribute("width", image.style.width);
+                poseCanvas.setAttribute("height", image.style.height);
+                poseCanvas.style.left = image.offsetLeft + "px";
+                poseCanvas.style.top = image.offsetTop + "px";
+                frameImageWrapper.appendChild(poseCanvas);
+                console.log("created image and canvas : " + image.id);
+                await poseLandmarker.detect(image, async (result) => {
+                    const poseCanvasCtx = poseCanvas.getContext("2d");
+                    const drawingUtils = new DrawingUtils(poseCanvasCtx);
+                    for (const landmark of result.landmarks) {
+                        drawingUtils.drawLandmarks(landmark, {
+                            radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                        });
+                        drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+                    }
+                })
+            }
+            console.log("finished processing video");
+        }, video.duration * 1000 + 1000);
+
+
 
         function getFrame(num) {
             const canvas = document.createElement("canvas");
