@@ -95,7 +95,6 @@ videoSelector.addEventListener("change", async (event) => {
                 if (i >= frameImageWrapper.childElementCount) {
                     clearInterval(frameIntervalDetect);
                 }
-                i++;
                 if (frameImageWrapper.children[i] == undefined) {
                     clearInterval(frameIntervalDetect);
                 }
@@ -117,6 +116,7 @@ videoSelector.addEventListener("change", async (event) => {
                         });
                         drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
                     }
+                i++;
                 })
                 console.log("finished processing video frame : " + image.id);
             }, 1000);
@@ -143,7 +143,7 @@ videoSelector.addEventListener("change", async (event) => {
             console.log("finished processing video frame : " + image0.id);
 
             console.log("finished processing video");
-        }, video.duration * 1000 + 1000);
+        }, video.duration * 1000 + 2000);
 
 
 
