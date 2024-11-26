@@ -63,12 +63,18 @@ videoSelector.addEventListener("change", async (event) => {
         // 動画を0.5秒ごとにキャプチャして表示
         const frameInterval = 0.2;
         let frameNumber = 0;
+        let poseLandmakerFlag = false;
         const frameIntervalCapture = setInterval(() => {
             frameNumber++;
             getFrame(frameNumber);
             if (video.currentTime + 2 * frameInterval > video.duration) {
                 clearInterval(frameIntervalCapture);
                 // ここに追加メモ
+                if (poseLandmakerFlag == false) {
+                    poseLandmakerFlag = true;
+                }else{
+                    return;
+                }
                 console.log("frameNumber : ", frameNumber);
                 if (!poseLandmarker) {
                     console.log("poseLandmarker is not ready yet.");
@@ -104,8 +110,6 @@ videoSelector.addEventListener("change", async (event) => {
                             drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
                         }
                     })
-
-
                 }
                 console.log("finished processing video");
             }
