@@ -63,7 +63,7 @@ videoSelector.addEventListener("change", async (event) => {
         // 動画の再生を開始
         video.play();
         // 動画を0.5秒ごとにキャプチャして表示
-        const frameInterval = 0.2;
+        const frameInterval = 0.5;
         let frameNumber = 0;
         const frameIntervalCapture = setInterval(async () => {
             frameNumber++;
@@ -88,48 +88,51 @@ videoSelector.addEventListener("change", async (event) => {
             console.log("frameImageWrapper.childElementCount : ");
             console.log(frameImageWrapper.childElementCount);
             console.log(frameImageWrapper.children);
-            const image0 = frameImageWrapper.children[0];
-            const poseCanvas0 = document.createElement("canvas");
-            poseCanvas0.setAttribute("class", "canvas");
-            poseCanvas0.setAttribute("width", image0.style.width);
-            poseCanvas0.setAttribute("height", image0.style.height);
-            poseCanvas0.style.left = image0.offsetLeft + "px";
-            poseCanvas0.style.top = image0.offsetTop + "px";
-            frameImageWrapper.appendChild(poseCanvas0);
-            console.log("created image and canvas : " + image0.id);
-            await poseLandmarker.detect(image0, async (result) => {
-                const poseCanvasCtx = poseCanvas0.getContext("2d");
-                const drawingUtils = new DrawingUtils(poseCanvasCtx);
-                for (const landmark of result.landmarks) {
-                    drawingUtils.drawLandmarks(landmark, {
-                        radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-                    });
-                    drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-                }
-            })
+            // 1秒ごとにposeLandmarker.detectを呼び出す
+            for (let i = 0; i < frameImageWrapper.childElementCount; i++) {
+                const image = frameImageWrapper.children[i];
+                const poseCanvas = document.createElement("canvas");
+                poseCanvas.setAttribute("class", "canvas");
+                poseCanvas.setAttribute("width", image.style.width);
+                poseCanvas.setAttribute("height", image.style.height);
+                poseCanvas.style.left = image.offsetLeft + "px";
+                poseCanvas.style.top = image.offsetTop + "px";
+                frameImageWrapper.appendChild(poseCanvas);
+                console.log("created image and canvas : " + image.id);
+                await poseLandmarker.detect(image, async (result) => {
+                    const poseCanvasCtx = poseCanvas.getContext("2d");
+                    const drawingUtils = new DrawingUtils(poseCanvasCtx);
+                    for (const landmark of result.landmarks) {
+                        drawingUtils.drawLandmarks(landmark, {
+                            radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                        });
+                        drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+                    }
+                })
+                console.log("finished processing video frame : " + image.id);
+            }
+
+            // const image0 = frameImageWrapper.children[0];
+            // const poseCanvas0 = document.createElement("canvas");
+            // poseCanvas0.setAttribute("class", "canvas");
+            // poseCanvas0.setAttribute("width", image0.style.width);
+            // poseCanvas0.setAttribute("height", image0.style.height);
+            // poseCanvas0.style.left = image0.offsetLeft + "px";
+            // poseCanvas0.style.top = image0.offsetTop + "px";
+            // frameImageWrapper.appendChild(poseCanvas0);
+            // console.log("created image and canvas : " + image0.id);
+            // await poseLandmarker.detect(image0, async (result) => {
+            //     const poseCanvasCtx = poseCanvas0.getContext("2d");
+            //     const drawingUtils = new DrawingUtils(poseCanvasCtx);
+            //     for (const landmark of result.landmarks) {
+            //         drawingUtils.drawLandmarks(landmark, {
+            //             radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+            //         });
+            //         drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            //     }
+            // })
             console.log("finished processing video frame : " + image0.id);
 
-            // for (const image of frameImageWrapper.children) {
-            //     console.log("processing video frame : " + image.id);
-            //     const poseCanvas = document.createElement("canvas");
-            //     poseCanvas.setAttribute("class", "canvas");
-            //     poseCanvas.setAttribute("width", image.style.width);
-            //     poseCanvas.setAttribute("height", image.style.height);
-            //     poseCanvas.style.left = image.offsetLeft + "px";
-            //     poseCanvas.style.top = image.offsetTop + "px";
-            //     frameImageWrapper.appendChild(poseCanvas);
-            //     console.log("created image and canvas : " + image.id);
-            //     await poseLandmarker.detect(image, async (result) => {
-            //         const poseCanvasCtx = poseCanvas.getContext("2d");
-            //         const drawingUtils = new DrawingUtils(poseCanvasCtx);
-            //         for (const landmark of result.landmarks) {
-            //             drawingUtils.drawLandmarks(landmark, {
-            //                 radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-            //             });
-            //             drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-            //         }
-            //     })
-            // }
             console.log("finished processing video");
         }, video.duration * 1000 + 1000);
 
@@ -151,8 +154,8 @@ videoSelector.addEventListener("change", async (event) => {
             videoFrameWrapper.appendChild(image);
             const image2 = document.createElement("img")
             image2.id = "frameImage" + num;
-            image2.style.width = (0.3*video.videoWidth) + "px";
-            image2.style.height = (0.3*video.videoHeight) + "px";
+            image2.style.width = (0.25*video.videoWidth) + "px";
+            image2.style.height = (0.25*video.videoHeight) + "px";
             image2.style.margin = "2px";
             image2.crossOrigin = "anonymous"
             image2.loading = "lazy"
