@@ -69,6 +69,7 @@ videoSelector.addEventListener("change", async (event) => {
             frameNumber++;
             getFrame(frameNumber);
             if (video.currentTime + 2 * frameInterval > video.duration) {
+                // 動画の再生が終了したらframeIntervalCaptureを停止
                 clearInterval(frameIntervalCapture);
             }
         }, frameInterval * 1000);
@@ -95,6 +96,9 @@ videoSelector.addEventListener("change", async (event) => {
                     clearInterval(frameIntervalDetect);
                 }
                 i++;
+                if (frameImageWrapper.children[i] == undefined) {
+                    clearInterval(frameIntervalDetect);
+                }
                 const image = frameImageWrapper.children[i];
                 const poseCanvas = document.createElement("canvas");
                 poseCanvas.setAttribute("class", "canvas");
@@ -115,7 +119,7 @@ videoSelector.addEventListener("change", async (event) => {
                     }
                 })
                 console.log("finished processing video frame : " + image.id);
-            }, 2000);
+            }, 1000);
 
             // const image0 = frameImageWrapper.children[0];
             // const poseCanvas0 = document.createElement("canvas");
