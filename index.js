@@ -89,7 +89,12 @@ videoSelector.addEventListener("change", async (event) => {
             console.log(frameImageWrapper.childElementCount);
             console.log(frameImageWrapper.children);
             // 1秒ごとにposeLandmarker.detectを呼び出す
-            for (let i = 0; i < frameImageWrapper.childElementCount; i++) {
+            let i = 0;
+            const frameIntervalDetect = setInterval(async () => {
+                if (i >= frameImageWrapper.childElementCount) {
+                    clearInterval(frameIntervalDetect);
+                }
+                i++;
                 const image = frameImageWrapper.children[i];
                 const poseCanvas = document.createElement("canvas");
                 poseCanvas.setAttribute("class", "canvas");
@@ -110,7 +115,7 @@ videoSelector.addEventListener("change", async (event) => {
                     }
                 })
                 console.log("finished processing video frame : " + image.id);
-            }
+            }, 2000);
 
             // const image0 = frameImageWrapper.children[0];
             // const poseCanvas0 = document.createElement("canvas");
