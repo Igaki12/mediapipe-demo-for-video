@@ -83,7 +83,8 @@ videoSelector.addEventListener("change", async (event) => {
                 console.log("frameImageWrapper.childElementCount : ");
                 console.log(frameImageWrapper.childElementCount);
                 console.log(frameImageWrapper.children);
-                for (let f = 0; f <= frameNumber; f++) {
+                for (let f = 0; f < 1+ frameNumber; f++) {
+                    console.log("processing video frame : frameImage" + f);
                     const image = document.getElementById("frameImage" + f);
                     const poseCanvas = document.createElement("canvas");
                     poseCanvas.setAttribute("class", "canvas");
