@@ -117,7 +117,6 @@ videoSelector.addEventListener("change", async (event) => {
                         });
                         drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
                     }
-                
                 })
                 console.log("finished processing video frame : " + image.id);
             }, 1500);
