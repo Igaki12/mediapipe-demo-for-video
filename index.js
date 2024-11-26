@@ -64,7 +64,7 @@ videoSelector.addEventListener("change", async (event) => {
         const frameInterval = 0.2;
         let frameNumber = 0;
         let poseLandmakerFlag = false;
-        const frameIntervalCapture = setInterval(() => {
+        const frameIntervalCapture = setInterval(async () => {
             frameNumber++;
             getFrame(frameNumber);
             if (video.currentTime + 2 * frameInterval > video.duration) {
@@ -99,7 +99,7 @@ videoSelector.addEventListener("change", async (event) => {
                     poseCanvas.style.top = image.offsetTop + "px";
                     frameImageWrapper.appendChild(poseCanvas);
                     console.log("created image and canvas : " + image.id);
-                    poseLandmarker.detect(image, async (result) => {
+                    await poseLandmarker.detect(image, async (result) => {
                         // 
                         const poseCanvasCtx = poseCanvas.getContext("2d");
                         const drawingUtils = new DrawingUtils(poseCanvasCtx);
