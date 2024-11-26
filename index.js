@@ -83,9 +83,8 @@ videoSelector.addEventListener("change", async (event) => {
                 console.log("frameImageWrapper.childElementCount : ");
                 console.log(frameImageWrapper.childElementCount);
                 console.log(frameImageWrapper.children);
-                for (let f = 0; f < 1+ frameNumber; f++) {
-                    console.log("processing video frame : frameImage" + f);
-                    const image = document.getElementById("frameImage" + f);
+                for (const image of frameImageWrapper.children) {
+                    console.log("processing video frame : " + image.id);
                     const poseCanvas = document.createElement("canvas");
                     poseCanvas.setAttribute("class", "canvas");
                     poseCanvas.setAttribute("width", image.style.width);
@@ -93,7 +92,7 @@ videoSelector.addEventListener("change", async (event) => {
                     poseCanvas.style.left = image.offsetLeft + "px";
                     poseCanvas.style.top = image.offsetTop + "px";
                     frameImageWrapper.appendChild(poseCanvas);
-                    console.log("created image and canvas : " + f);
+                    console.log("created image and canvas : " + image.id);
                     poseLandmarker.detect(image, async (result) => {
                         // 
                         const poseCanvasCtx = poseCanvas.getContext("2d");
